@@ -1,0 +1,32 @@
+<template>
+    <lightning-card title="Account Report">
+        <div class="slds-p-horizontal_medium">
+            <table class="slds-table slds-table_bordered slds-table_cell-buffer">
+                <thead>
+                    <tr class="slds-line-height_reset">
+                        <th class="" scope="col">
+                            <div class="slds-truncate" title="OwnerId"> OwnerId</div>
+                        </th>
+                        <th class="" scope="col">
+                            <div class="slds-truncate" title="Name">Name</div>
+                        </th>
+                        <!-- Add more columns as needed -->
+                    </tr>
+                </thead>
+                <tbody>
+                    <template for:each={accounts} for:item="account">
+                        <tr key={account.Id}>
+                            <td data-label="OwnerId">
+                                <div class="slds-truncate" title={account.OwnerId}>{account.OwnerId}</div>
+                            </td>
+                            <td data-label="Name">
+                                <div class="slds-truncate" title={account.Name}>{account.Name}</div>
+                            </td>
+                            <!-- Add more cells for additional columns -->
+                        </tr>
+                    </template>
+                </tbody>
+            </table>
+        </div>
+    </lightning-card>
+</template>

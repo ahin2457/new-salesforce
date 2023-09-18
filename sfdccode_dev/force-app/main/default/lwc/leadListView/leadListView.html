@@ -1,0 +1,142 @@
+<template>
+    <div class="slds-col" style="background-color:#F3F3F3;">
+      
+          <lightning-card title="CustomLead" icon-name="custom:custom63" > 
+
+          </lightning-card>
+    
+        
+        
+        <div class="slds-grid" style="height:30px; background-color:#F3F3F3;">
+           <lightning-button variant="" label="새로만들기" title="Open popup" onclick={showModalBox}>  </lightning-button>
+        </div>
+
+
+       <!-- select 콤보박스-->
+        <div class="slds-grid">
+            <lightning-combobox
+                name="LeadSearch"
+                lable="SelectLead"
+                placeholder="Select list"
+                options={options}
+                onchange={handleChangeLead}></lightning-combobox>
+
+        </div>  
+
+       
+        
+
+        <div  class="slds-grid" style="height:60px;margin-top:-10px;border-radius:5px;" > 
+           <lightning-input   class="slds-scrollable" type="search" placeholder="Search..." value={leadName} name="leadName"  onchange={handleLeadSearch} label="" ></lightning-input>
+        </div>
+
+        <lightning-button   type=""  onclick={handleFilter} label="Search" ></lightning-button>
+
+
+        <div >
+
+             <lightning-datatable class="slds-scrollable"
+ 
+                 key-field="Id"
+ 
+                  data={availableLeads}
+ 
+                  columns={columns}
+ 
+                  show-checkbox-column="true"
+ 
+                 show-row-number-column="true">
+ 
+             </lightning-datatable>
+ 
+        </div>
+    </div>
+
+
+   
+
+
+
+<!--모달창 시작 -->
+
+     <template if:true={isShowModal}>
+
+                <!--
+                    I Used SLDS for this code
+                    Here is link https://www.lightningdesignsystem.com/components/modals/
+                --> 
+
+        <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container">
+                <!-- modal header start -->
+                <header class="slds-modal__header">
+                    <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick={hideModalBox}>
+                        <lightning-icon icon-name="utility:close"
+                        alternative-text="close"
+                        variant="inverse"
+                        size="small" onclick={closeModalBox}></lightning-icon>
+                        <span class="slds-assistive-text">Close</span>
+                    </button>
+                    <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">새 리드</h2>
+                </header>
+            
+                <!-- modal body start -->
+                <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                  
+                    <lightning-record-edit-form object-api-name="Lead" onsuccess={handleSuccess}  >
+                        <lightning-messages>
+                        </lightning-messages>
+                        <lightning-input-field field-name="Name">
+                        </lightning-input-field>
+                        <lightning-input-field field-name="Status">
+                        </lightning-input-field>
+                        <lightning-input-field field-name="Company">
+                        </lightning-input-field>
+                        <lightning-input-field field-name="Email">
+                        </lightning-input-field>
+                        <lightning-input-field field-name="Rating">
+                        </lightning-input-field>
+                        <lightning-input-field field-name="Title">
+                        </lightning-input-field>
+                        <lightning-input-field field-name="MobilePhone">
+                        </lightning-input-field>
+                    
+                        <lightning-button class="slds-m-top_small" variant="brand" type="submit"  name="update" label="Save" onchange={handleClose}>
+                        </lightning-button>
+                        <lightning-button class="slds-m-top_small" variant="" type="submit"  onclick={closeModalBox} name="update" label="Cancel">
+                        </lightning-button>
+                    </lightning-record-edit-form>
+                    <!-- <button class="slds-button slds-button_brand" variant="brand" type="submit">Save</button>
+                    <button class="slds-button slds-button_neutral" onclick={closeModalBox}>Cancel</button> -->
+                    <!-- <div>
+                       <strong>이름</strong>
+                       <div class="slds-input" >
+                           <lightning-input type="input" placeholder="성(姓)"   label="성"></lightning-input>
+                           <lightning-input type="input" placeholder="이름(성 없이)"   label="이름(성 없이)"></lightning-input>
+                           <strong>리드 상태</strong>
+
+                           
+                         
+                            <select class="slds-select" id="leadStatusSelect">
+                                
+                                   <template for:each={options} for:item="lead">
+                                      <option key={lead.Status} value={lead.Status}>{lead.Status}</option>
+                                   </template>                          
+                          </select> 
+                       </div>
+                    </div> -->
+                </div>
+
+                <!-- modal footer start-->
+                <footer class="slds-modal__footer">
+                   
+                </footer>Save</footer>
+            
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+
+
+    </template>
+
+</template>
