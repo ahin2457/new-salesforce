@@ -1,21 +1,30 @@
 public with sharing class contactListViewHelper {
     
     //contact 가져오기
-    @AuraEnabled(cacheable=True)
+    @AuraEnabled
     public static List<Contact> getContacts(){
         return [SELECT Id, firstName, lastName, accountId, 
                 account.name, mailingStreet, mailingCity, mailingState, mailingPostalCode, mailingCountry, email 
                 FROM Contact
                 LIMIT 1000];
     }
+    @AuraEnabled
+    public static List<Contact> recentView(){
+        List<Contact> recentlyView = [SELECT Id, firstName, lastName, accountId, 
+        account.name, mailingStreet, mailingCity, mailingState, mailingPostalCode, mailingCountry, email 
+        FROM Contact ORDER BY LastViewedDate ASC
+        LIMIT 1000];
+        return recentlyView;
+    }
 
     // 검색에서 contact List 가져오기
-    @AuraEnabled(cacheable=True)
+    @AuraEnabled
     public static List<Contact> searchContact(String searchString){
-        List<List<SObject>> contacts = [FIND :searchString IN ALL FIELDS RETURNING Contact(FirstName, LastName, Email, mailingStreet,
-        mailingCity, mailingCountry, mailingPostalCode, account.Name)];
-
-        return (List<Contact>) contacts[0];
+        String searchKeyword = '%'+searchString+'%';
+        List<Contact> serachResult = [SELECT Id, firstName, lastName, accountId, 
+        account.name, mailingStreet, mailingCity, mailingState, mailingPostalCode, mailingCountry, email 
+        FROM Contact WHERE Name LIKE :searchKeyword LIMIT 100 ];
+        return serachResult;
     }
 
     // 목록에서 contact 삭제하기
@@ -25,4 +34,6 @@ public with sharing class contactListViewHelper {
             delete [SELECT Id FROM Contact WHERE Id in: contactIds];
         }
     }
+
+    
 }

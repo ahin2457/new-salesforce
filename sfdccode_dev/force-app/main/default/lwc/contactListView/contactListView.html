@@ -1,6 +1,16 @@
 <template>
     <lightning-card title="Custom Contact List View">
 
+        <lightning-combobox style="width:380px; margin-left:10px;"
+                name="progress"
+                label="Status"
+                value={value}
+                placeholder="Select List"
+                options={options}
+                onchange={handleChange}
+                >
+        </lightning-combobox>
+
         <div slot="actions">
             
             <lightning-button label="New" onclick={showModalBox}></lightning-button>
@@ -15,12 +25,12 @@
                 <lightning-input type="search" onchange={handleSearch} style="margin-left:10px;"></lightning-input>
             </div>
             <lightning-datatable
-            key-field="id"
-            data={contacts}
-            columns={cols}
-            onrowselection={handleRowSelection}
-            onrowaction={handleRowAction}
-            > 
+                key-field="id"
+                data={contacts}
+                columns={cols}
+                onrowselection={handleRowSelection}
+                onrowaction={handleRowAction}
+                > 
             </lightning-datatable>
         </div>
     </lightning-card>

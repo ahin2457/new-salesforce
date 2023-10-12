@@ -1,5 +1,5 @@
 import { LightningElement, track, wire } from 'lwc';
-
+import recentView from '@salesforce/apex/contactListViewHelper.recentView';
 import getContacts from "@salesforce/apex/contactListViewHelper.getContacts"
 import searchContact from "@salesforce/apex/contactListViewHelper.searchContact"
 import deleteContacts from "@salesforce/apex/contactListViewHelper.deleteContacts"
@@ -8,7 +8,8 @@ import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import { NavigationMixin } from 'lightning/navigation';
 import { refreshApex } from '@salesforce/apex';
 
-const ACTIONS = [{label: 'Delete', name: 'delete'}]
+const ACTIONS = [{label:'edit', name: 'edit'},
+                {label: 'Delete', name: 'delete'}]
 
 const COLS = [{label: 'Name', fieldName: 'link', type: 'url', typeAttributes: {label: {fieldName: 'FullName'}}},
               {label: 'Email', fieldName: 'Email'},
@@ -25,26 +26,51 @@ export default class ContactListView extends NavigationMixin(LightningElement) {
     wiredContacts;
     selectedContacts;
     baseData;
+    value = 'All';
+
+    get options() {
+        return [
+            { label: 'All', value: 'All' },
+            { label: 'Recently', value: 'recent' }
+        ];
+    }
+
+    handleRowSelection(event){
+        this.selectedContacts = event.detail.selectedRows;
+    }
 
     get selectedContactsLen() {
         if(this.selectedContacts == undefined) return 0;
         return this.selectedContacts.length
     }
 
-    @wire(getContacts)
-    contactsWire(result){
-        this.wiredContacts = result;
-        if(result.data){
-            this.contacts = result.data.map((row) => {
-                return this.mapContacts(row);
-            })
-            this.baseData = this.contacts;
-        }
-        if(result.error){
-            console.error(result.error);
-        }
+    
+    async viewAll(){
+        const result = await getContacts();
+        this.contacts = result.map(row =>{
+            return this.mapContacts(row);
+        })
+    }
+  
+    async viewRecent(){
+        const result = await recentView();
+        this.contacts = result.map(row =>{
+            return this.mapContacts(row);
+        })
+    }
+    
+    async connectedCallback(){
+        await this.viewAll();
     }
 
+    async handleChange(event){
+    
+    if(event.target.value == 'All'){
+        await this.viewAll();
+    }else if(event.target.value =='recent'){
+        await this.viewRecent();
+    }
+  }
     mapContacts(row){
         var accountName = '';
         var accountLink = '';
@@ -83,13 +109,11 @@ export default class ContactListView extends NavigationMixin(LightningElement) {
         };
     }
 
-    handleRowSelection(event){
-        this.selectedContacts = event.detail.selectedRows;
-    }
+   
 
     async handleSearch(event){
-        if(event.target.value == ""){
-            this.contacts = this.baseData
+        if(!event.target.value){
+            await this.viewAll();
         }else if(event.target.value.length > 1){
             const searchContacts = await searchContact({searchString: event.target.value})
 
@@ -134,7 +158,7 @@ export default class ContactListView extends NavigationMixin(LightningElement) {
                 title: 'Success',
                 message: '계정이 성공적으로 저장되었습니다!',
                 variant: 'success'
-            })
+            }) 
         );
 
         this.closeModalBox(event);
@@ -143,9 +167,32 @@ export default class ContactListView extends NavigationMixin(LightningElement) {
 
     //Delete에 대한 작동?
     handleRowAction(event) {
-        deleteContacts({contactIds : [event.detail.row.Id]}).then(() => {
-            refreshApex(this.wiredContacts);
-        })
+        let actionName = event.target.action.name;
+        let row = event.detail.row;
+
+        switch (actionName) {
+            case 'edit':
+                
+                break ;
+            case 'delete':
+                    
+                break;
+        }
+    }
+
+    deleteCon(event){
+        let conRecord = [];
+        conRecord.push(event.Id);
+        deleteContacts
+        this.dispatchEvent(
+            new ShowToastEvent({
+                title: 'Success',
+                message: '계정이 삭제되었습니다',
+                variant: 'success'
+            }) 
+        );
+
+        
     }
 
     // 한줄씩 삭제

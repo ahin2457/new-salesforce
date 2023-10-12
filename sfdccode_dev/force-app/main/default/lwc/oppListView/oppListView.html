@@ -1,11 +1,20 @@
 <template>
     <lightning-card title="Custom Opportunity">
+        
+        <lightning-combobox
+                name="progress"
+                label="Status"
+                value={value}
+                placeholder="Select List"
+                options={options}
+                onchange={handleChange}>
 
+        </lightning-combobox>
+        
         <div slot="actions">
-
             <lightning-button label="New"></lightning-button>
-
         </div>
+        
         <div class="slds-card__body__inner">
             <div class="slds-grid slds-gutters slds-p-bottom_x-small slds-p-left_x-small" style="margin-left:10px;">
                 <lightning-input type="search"></lightning-input>
@@ -13,9 +22,9 @@
             <lightning-datatable
                 key-field="id"
                 data={opportunity}
-                columns={}
-                onrowselection={handleRowSelection}
-                onrowaction={handleRowAction}
+                columns={colums}
+                onrowselection={}
+                onrowaction={}
                 >
             </lightning-datatable>
         </div>
