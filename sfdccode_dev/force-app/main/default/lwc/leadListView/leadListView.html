@@ -1,13 +1,9 @@
 <template>
-    <div class="slds-card" style="background-color:#F3F3F3;">
+    <div class="slds-grid" style="background-color:#F3F3F3;">
       
           <lightning-card title="CustomLead" icon-name="custom:custom63" > 
 
-          </lightning-card>
-    
-        
-        
-        <div class="slds-card " style="height:30px; background-color:#F3F3F3; float:right;">
+        <div class="slds-grid" style="height:30px; background-color:#F3F3F3; float:right;">
            <lightning-button variant="" label="새로만들기" title="Open popup" onclick={showModalBox}>  </lightning-button>
         </div>
 
@@ -26,14 +22,14 @@
        
         
 
-        <div  class="slds-card " style="height:60px;margin-top:-10px;border-radius:5px;float:right;" > 
+        <div  class="slds-grid" style="height:60px;margin-top:-10px;border-radius:5px;float:right;" > 
            <lightning-input   class="slds-scrollable" type="search" placeholder="Search..." value={leadName} name="leadName"  onchange={handleLeadSearch} label="" ></lightning-input>
         </div>
 <!-- 
         <lightning-button   type=""  onclick={handleFilter} label="Search" ></lightning-button> -->
 
 
-        <div class="slds-card slds-has-bottom-magnet">
+        <div class="slds-grid slds-has-bottom-magnet">
 
              <lightning-datatable class="slds-scrollable"
  
@@ -50,6 +46,7 @@
              </lightning-datatable>
  
         </div>
+    </lightning-card>
     </div>
 
 

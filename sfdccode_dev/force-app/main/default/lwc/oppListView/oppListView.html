@@ -1,0 +1,23 @@
+<template>
+    <lightning-card title="Custom Opportunity">
+
+        <div slot="actions">
+
+            <lightning-button label="New"></lightning-button>
+
+        </div>
+        <div class="slds-card__body__inner">
+            <div class="slds-grid slds-gutters slds-p-bottom_x-small slds-p-left_x-small" style="margin-left:10px;">
+                <lightning-input type="search"></lightning-input>
+            </div>
+            <lightning-datatable
+                key-field="id"
+                data={opportunity}
+                columns={}
+                onrowselection={handleRowSelection}
+                onrowaction={handleRowAction}
+                >
+            </lightning-datatable>
+        </div>
+    </lightning-card>
+</template>

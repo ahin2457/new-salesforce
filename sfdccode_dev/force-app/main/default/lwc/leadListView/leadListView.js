@@ -96,10 +96,6 @@ export default class leadListView extends LightningElement {
     }
     
 
-    
-   
-
-
 
     showModalBox() {  
         this.isShowModal = true;

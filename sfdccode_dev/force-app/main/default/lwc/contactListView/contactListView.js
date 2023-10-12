@@ -1,8 +1,9 @@
-import { LightningElement, wire } from 'lwc';
+import { LightningElement, track, wire } from 'lwc';
 
 import getContacts from "@salesforce/apex/contactListViewHelper.getContacts"
 import searchContact from "@salesforce/apex/contactListViewHelper.searchContact"
 import deleteContacts from "@salesforce/apex/contactListViewHelper.deleteContacts"
+import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 
 import { NavigationMixin } from 'lightning/navigation';
 import { refreshApex } from '@salesforce/apex';
@@ -17,6 +18,8 @@ const COLS = [{label: 'Name', fieldName: 'link', type: 'url', typeAttributes: {l
 ]
 
 export default class ContactListView extends NavigationMixin(LightningElement) {
+    @track isShowModal = false;
+
     cols = COLS;
     contacts;
     wiredContacts;
@@ -108,7 +111,37 @@ export default class ContactListView extends NavigationMixin(LightningElement) {
         });
     }
 
-    // 
+    // modal 닫기 버튼
+    closeModalBox(){
+        this.isShowModal = false;
+    }
+
+    // New 버튼 onclick 이벤트 모달 창 띄우기
+    showModalBox(){
+        this.isShowModal = true;
+    }
+    
+    // reload
+    handleClose = () => {
+        window.location.reload();
+    }
+
+    // 저장 알림 표시 & reload
+    handelSuccess(event){
+        
+        this.dispatchEvent(
+            new ShowToastEvent({
+                title: 'Success',
+                message: '계정이 성공적으로 저장되었습니다!',
+                variant: 'success'
+            })
+        );
+
+        this.closeModalBox(event);
+        this.handleClose(event);
+    }
+
+    //Delete에 대한 작동?
     handleRowAction(event) {
         deleteContacts({contactIds : [event.detail.row.Id]}).then(() => {
             refreshApex(this.wiredContacts);
