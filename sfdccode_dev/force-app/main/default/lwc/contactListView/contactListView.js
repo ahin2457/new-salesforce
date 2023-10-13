@@ -65,11 +65,11 @@ export default class ContactListView extends NavigationMixin(LightningElement) {
 
     async handleChange(event){
     
-    if(event.target.value == 'All'){
-        await this.viewAll();
-    }else if(event.target.value =='recent'){
-        await this.viewRecent();
-    }
+        if(event.target.value == 'All'){
+            await this.viewAll();
+        }else if(event.target.value =='recent'){
+            await this.viewRecent();
+        }
   }
     mapContacts(row){
         var accountName = '';

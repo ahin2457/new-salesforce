@@ -2,6 +2,7 @@ import { LightningElement, track } from 'lwc';
 import getOpportunity from '@salesforce/apex/oppListView.getOpportunity';
 import searchOpp from '@salesforce/apex/oppListView.searchOpp';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
+import recentView from '@salesforce/apex/oppListView.recentView';
 
 
 const Colums = [
@@ -19,26 +20,49 @@ export default class OppListView extends LightningElement {
     opportunity;
     columns = Colums;
     selectedOpps;
+    value = 'All';
     
     // 필터 목록 데이터
     get options(){
         return [
             { label:'All' , value: 'All'},
-            { label:'Recently', values: 'recent'}
+            { label:'Recently', value: 'recent'}
         ];
     }
 
     async connectedCallback(){
         await this.viewAll();
     }
+
+
     // select opp data
     async viewAll(){
-        
         const result = await getOpportunity();
         this.opportunity = result.map(row =>{
             return this.mapOpportunity(row);
         })
     }
+
+    // select recent data (filter)
+    async viewRecent(){
+        const result = await recentView();
+        this.opportunity = result.map(row =>{
+            return this.mapOpportunity(row);
+        })
+    }
+
+
+    // All, recently 필터 select
+    async handleChange(event){
+        if(event.target.value == 'All'){
+            await this.viewAll();
+            console.log(viewAll());
+        }else if(event.target.value == 'recent'){
+            await this.viewRecent();
+            console.log(viewRecent());
+        }
+       }
+    
     
     // select opp data
     // mapping
@@ -110,7 +134,7 @@ export default class OppListView extends LightningElement {
     window.location.reload();
    }
     
-
-   //
+   
+  
 
 }
