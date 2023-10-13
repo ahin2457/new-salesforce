@@ -2,28 +2,45 @@ import { LightningElement, track } from 'lwc';
 import getOpportunity from '@salesforce/apex/oppListView.getOpportunity';
 
 const Colums = [
-    { label: 'oppportunity Name' , fieldName: 'Name' , type: 'url' ,typeAttributes: { label: {fieldName:'Name'}, target:'__blank'}},
-    { label: 'Account Name' , fieldName: 'AccountName', type: 'text', typeAttributes: { label: {fieldName:'AccountName'}, target: '__blank'}},
-    { label: 'Amount' , fieldName:'Amount', type: 'text', type: 'text',typeAttributes: { label: {fieldNmae: 'Amount'},  target:'__blank'}},
-    { label: 'Close Date', fieldName: 'CloseDate', type: 'text', typeAttributes: { label: {fieldName: 'ClseDate'}, target:'__blank'}},
-    { label: 'stage', fieldName: 'stage', type: 'text', typeAttributes: {label: {fieldName: 'stage'}, target:'__blank'}}
+    { label: 'oppportunity Name' , fieldName: 'link' , type: 'url' ,typeAttributes: { label: {fieldName:'Name'}}},
+    { label: 'Account' , fieldName: 'AccountId', type: 'url', typeAttributes: { label: {fieldName:'AccountId'}}},
+    { label: 'Amount' , fieldName:'Amount', type: 'text', type: 'text',typeAttributes: { label: {fieldNmae: 'Amount'}}},
+    { label: 'Close Date', fieldName: 'CloseDate', type: 'text', typeAttributes: { label: {fieldName: 'CloseDate'}}},
+    { label: 'Stage', fieldName: 'StageName', type: 'text', typeAttributes: {label: {fieldName: 'StageName'}}}
+    
 ]
 
 export default class OppListView extends LightningElement {
-    @track data;
     opportunity;
-    colums = Colums;
+    columns = Colums;
     
+    async connectedCallback(){
+        await this.viewAll();
+    }
+    // select opp data
     async viewAll(){
         
         const result = await getOpportunity();
         this.opportunity = result.map(row =>{
-            return this.mapOpportunity
+            return this.mapOpportunity(row);
         })
     }
     
+    // select opp data
+    // mapping
     mapOpportunity(row){
-        var 
+        var accountName = '';
+        var accountLink = '';
+        if(row.AccoutId != undefined){
+            accountLink = `/${row.AccountId}`;
+            accountName = row.Account['Name'];
+        }
+        return {...row,
+            Name: row.Name,
+            link: `/${row.Id}`,
+            accountLink: accountLink,
+            AccountName: accountName
+        };
     }
 
 

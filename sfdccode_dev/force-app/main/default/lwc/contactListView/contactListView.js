@@ -11,10 +11,10 @@ import { refreshApex } from '@salesforce/apex';
 const ACTIONS = [{label:'edit', name: 'edit'},
                 {label: 'Delete', name: 'delete'}]
 
-const COLS = [{label: 'Name', fieldName: 'link', type: 'url', typeAttributes: {label: {fieldName: 'FullName'}}},
-              {label: 'Email', fieldName: 'Email'},
-              {label: 'Account', fieldName: "accountLink", type: 'url', typeAttributes: {label: {fieldName: 'AccountName'}}},
-              {label: "Mailing Address", fieldName: 'MailingAddress'},
+const COLS = [{ label: 'Name', fieldName: 'link', type: 'url', typeAttributes: {label: {fieldName: 'FullName'}}},
+              { label: 'Email', fieldName: 'Email'},
+              { label: 'Account', fieldName: "accountLink", type: 'url', typeAttributes: {label: {fieldName: 'AccountName'}}},
+              { label: "Mailing Address", fieldName: 'MailingAddress'},
               { fieldName: "actions", type: 'action', typeAttributes: {rowActions: ACTIONS}}
 ]
 
