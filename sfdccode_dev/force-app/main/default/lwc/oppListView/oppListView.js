@@ -1,5 +1,7 @@
 import { LightningElement, track } from 'lwc';
 import getOpportunity from '@salesforce/apex/oppListView.getOpportunity';
+import searchOpp from '@salesforce/apex/oppListView.searchOpp';
+
 
 const Colums = [
     { label: 'oppportunity Name' , fieldName: 'link' , type: 'url' ,typeAttributes: { label: {fieldName:'Name'}}},
@@ -13,6 +15,7 @@ const Colums = [
 export default class OppListView extends LightningElement {
     opportunity;
     columns = Colums;
+    selectedOpps;
     
     async connectedCallback(){
         await this.viewAll();
@@ -45,45 +48,28 @@ export default class OppListView extends LightningElement {
 
 
     handleRowSelection(event){
-        this.selectedContacts = event.detail.selectedRows;
+        this.selectedOpps = event.detail.selectedRows;
     }
 
     get selectedContacts(){
-        if(this.selectedContacts == undefined) return 0;
-        return this.selectedContacts.length
+        if(this.selectedOpps == undefined) return 0;
+        return this.selectedOpps.length
     }
-
-    handleOppSearch(event){
-        const searchKey = event.target.value.toLowerCase();
-
-        if(searchKey){
-            this.searchData = this.initialRecords;
-
-            if(this.searchData) {
-                let searchRecords = [];
-
-                for(let record of this.searchData) {
-                    let valuesArray = Object.values(record);
-
-                    for(let val of valuesArray) {
-                        let strVal = String(val);
-
-                        if(strVal) {
-                            if(strVal.toLowerCase().includes(searchKey)){
-                                searchRecords.push(record);
-                                break;
-                            }
-                        }
-                    }
-                }
-                this.searchData = searchRecords;
-                this.availableLeads = this.searchData;
-            }
-        }else {
-            this.searchData = this.initialRecords;
-            this.availableLeads = this.searchData;
+    
+    // search
+    async handleOppSearch(event){
+        if(!event.target.value){
+            await this.viewAll();
+        }else if(event.target.value.length > 1){
+            const searchOpps = await searchOpp({searchString: event.target.value})
+            
+            this.opportunity = searchOpps.map(row => {
+                return this.mapOpportunity(row);
+            });
         }
     }
+
+   
     
     
 

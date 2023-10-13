@@ -110,7 +110,7 @@ export default class ContactListView extends NavigationMixin(LightningElement) {
     }
 
    
-
+    // search
     async handleSearch(event){
         if(!event.target.value){
             await this.viewAll();

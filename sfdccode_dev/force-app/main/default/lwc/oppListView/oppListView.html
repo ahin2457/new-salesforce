@@ -17,10 +17,10 @@
         
         <div class="slds-card__body__inner">
             <div class="slds-grid slds-gutters slds-p-bottom_x-small slds-p-left_x-small" style="margin-left:10px;">
-                <lightning-input type="search"></lightning-input>
+                <lightning-input type="search" onchange={handleOppSearch}></lightning-input>
             </div>
             <lightning-datatable
-                key-field="Id"
+                key-field="id"
                 data={opportunity}
                 columns={columns}
                 onrowselection={handleRowSelection}
@@ -29,4 +29,10 @@
             </lightning-datatable>
         </div>
     </lightning-card>
+
+
+
+    <!-- 모달 시작 -->
+
+    <template></template>
 </template>
