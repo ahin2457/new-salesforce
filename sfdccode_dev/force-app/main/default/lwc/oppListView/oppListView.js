@@ -1,6 +1,7 @@
 import { LightningElement, track } from 'lwc';
 import getOpportunity from '@salesforce/apex/oppListView.getOpportunity';
 import searchOpp from '@salesforce/apex/oppListView.searchOpp';
+import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 
 
 const Colums = [
@@ -13,10 +14,20 @@ const Colums = [
 ]
 
 export default class OppListView extends LightningElement {
+    @track isShowModal = false;
+
     opportunity;
     columns = Colums;
     selectedOpps;
     
+    // 필터 목록 데이터
+    get options(){
+        return [
+            { label:'All' , value: 'All'},
+            { label:'Recently', values: 'recent'}
+        ];
+    }
+
     async connectedCallback(){
         await this.viewAll();
     }
@@ -69,8 +80,37 @@ export default class OppListView extends LightningElement {
         }
     }
 
-   
+    // modeal창 열기 
+    showModalBox(){
+        this.isShowModal = true;
+    }
+
+    // modal창 닫기
+    closeModalBox(){
+        this.isShowModal = false;
+   }
+
+   // 저장 알림
+   handleSuccess(event){
+
+        this.dispatchEvent(
+            new ShowToastEvent({
+                title: 'Sucess',
+                message: '기회가 성공적으로 저장되었습니다!',
+                variant: 'Success'
+            })
+        );
+
+        this.closeModalBox(event);
+        this.handleClose(event);
+   }
+
+   // 새로고침
+   handleClose(){
+    window.location.reload();
+   }
     
-    
+
+   //
 
 }
